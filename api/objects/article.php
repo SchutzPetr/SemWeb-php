@@ -54,6 +54,21 @@ class Article
         $this->author = $row['author'];
     }
 
+    function update($id, $title, $body, $source){
+        $query = "UPDATE article SET title = ?, content = ?, source  = ? WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $title);
+        $stmt->bindParam(2, $body);
+        $stmt->bindParam(3, $source);
+        $stmt->bindParam(4, $id);
+
+        if($stmt->execute()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     function read()
     {
         $query = "SELECT * FROM article";
