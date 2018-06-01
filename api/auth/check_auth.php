@@ -19,8 +19,8 @@ $db = $database->getConnection();
 
 $user = new User($db);
 
-$user->email = isset($_GET['login']) ? $_GET['login'] : die();
-$user->password = isset($_GET['password']) ? $_GET['password'] : die();
+$user->email = isset($_GET['login']) ? $_GET['login'] : "test@test.com";
+$user->password =  isset($_GET['password']) ? $_GET['password'] : "pass";
 
 $user->readOne();
 

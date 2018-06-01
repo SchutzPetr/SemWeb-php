@@ -47,17 +47,19 @@ class User
     }
 
     function readOne(){
-        $query = "SELECT * from user u WHERE u.email = ? AND u.password = ?";
+        $query = "SELECT * from user u WHERE u.email = ?";
 
         $stmt = $this->conn->prepare( $query );
 
         $stmt->bindParam(1, $this->email);
-        $stmt->bindParam(2, $this->password);
 
         $stmt->execute();
 
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
+        if(!password_verify($this->password, $row['password'])){
+            return;
+        }
         $this->id = $row['id'];
         $this->email = $row['email'];
         $this->name = $row['name'];

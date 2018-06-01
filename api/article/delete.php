@@ -20,37 +20,34 @@ include_once '../check_auth.php';
 $database = new Database();
 $db = $database->getConnection();
 $user = new User($db);
+
 $token = getTokenFromHeader();
 $user->token = $token;
 
 $user->readByToken();
+$article = new Article($db);
 
-$id = $_POST['id'];
-$title = $_POST['title'];
-$body = $_POST['body'];
-$source = $_POST['source'];
+$article->id = isset($_GET['id']) ? $_GET['id'] : die();
 
-if($id == null || $title == null || $body == null || $source == null || $user == null){
+if ($user->id == null) {
     return;
 }
 
-if($user->role < 3){
+echo $article->id;
+
+if ($user->role < 3) {
     header("HTTP/1.1 401 Unauthorized");
     exit;
 }
 
-$article = new Article($db);
-
-if($article->update($id, $title, $body, $source)){
+if ($article->delete()) {
     echo '{';
-    echo '"message": "Article was updated."';
+    echo '"message": "Article was deleted."';
     echo '}';
-}
-
-// if unable to update the product, tell the user
-else{
+} // if unable to update the product, tell the user
+else {
     echo '{';
-    echo '"message": "Unable to update article."';
+    echo '"message": "Unable to delete article."';
     echo '}';
 }
 ?>

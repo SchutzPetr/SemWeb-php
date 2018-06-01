@@ -25,12 +25,12 @@ $user->token = $token;
 
 $user->readByToken();
 
-$id = $_POST['id'];
+$indexId = $_POST['indexId'];
 $title = $_POST['title'];
 $body = $_POST['body'];
 $source = $_POST['source'];
 
-if($id == null || $title == null || $body == null || $source == null || $user == null){
+if($indexId == null || $title == null || $body == null || $source == null || $user == null){
     return;
 }
 
@@ -41,16 +41,15 @@ if($user->role < 3){
 
 $article = new Article($db);
 
-if($article->update($id, $title, $body, $source)){
+if($article->insert($title, $body, $source, 1, $user, 1, $indexId)){
     echo '{';
-    echo '"message": "Article was updated."';
+    echo '"message": "Article was inserted."';
     echo '}';
 }
 
-// if unable to update the product, tell the user
 else{
     echo '{';
-    echo '"message": "Unable to update article."';
+    echo '"message": "Unable to insert article."';
     echo '}';
 }
 ?>
